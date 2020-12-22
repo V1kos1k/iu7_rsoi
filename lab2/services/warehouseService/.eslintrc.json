@@ -1,0 +1,29 @@
+// https://tproger.ru/translations/setting-up-eslint-and-prettier/
+// npmjs.com/package/@typescript-eslint/eslint-plugin
+
+{
+  // Настройки проекта
+  "env": {
+    "node": true,
+    // Добавляем возможности ES2021
+    "es2021": true
+  },
+  // Наборы правил
+  "extends": [
+    // Базовые правила для TypeScript
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  // Движок парсинга
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,  // 12
+    "sourceType": "module"
+  },
+  // Плагин с наборами правил для TypeScript
+  "plugins": [
+    "@typescript-eslint",  // npm module "@typescript-eslint/eslint-plugin"
+    "prettier"  // npm module "eslint-plugin-prettier"
+  ]
+}
