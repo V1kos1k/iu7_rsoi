@@ -1,0 +1,54 @@
+{
+  "name": "lab2-microservices-v1kos1k_warehouse-service",
+  "version": "1.0.0",
+  "description": "## Сборка и запуск",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "build": "tsc",
+    "start": "npm run build && DATABASE_URL=$(heroku config:get DATABASE_URL -a v1kos1k-warehouse-service) node ./dist/src/server.js",
+    "start-node": "DATABASE_URL=$(heroku config:get DATABASE_URL -a v1kos1k-warehouse-service) node ./dist/src/server.js",
+    "eslint": "eslint src --ext .ts,.tsx ",
+    "eslint-fix": "eslint src --fix --ext .ts,.tsx ",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmstu-rsoi/lab2-microservices-V1kos1k.git"
+  },
+  "author": "Mkhitaryan Victoria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bmstu-rsoi/lab2-microservices-V1kos1k/issues"
+  },
+  "homepage": "https://github.com/bmstu-rsoi/lab2-microservices-V1kos1k#readme",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/eslint": "^7.2.3",
+    "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.2",
+    "@types/pg": "^7.14.5",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.4.2",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.8",
+    "@types/node-fetch": "^2.5.7",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.3.3"
+  }
+}

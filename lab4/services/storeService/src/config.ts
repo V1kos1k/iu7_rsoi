@@ -1,0 +1,18 @@
+export const configinfo = {
+  // serverHostOrder: 'https://v1kos1k-order-service.herokuapp.com',
+  // serverHostStore: 'https://v1kos1k-store-service.herokuapp.com',
+  // serverHostWarehouse: 'https://v1kos1k-warehouse-service.herokuapp.com',
+  // serverHostWarranty: 'https://v1kos1k-warranty-service.herokuapp.com',
+  // serverHostSession: 'https://v1kos1k-session-service.herokuapp.com',
+  serverHostOrder: 'http://localhost:8380',
+  serverHostStore: 'https://v1kos1k-store-service.herokuapp.com',
+  serverHostWarehouse: 'http://localhost:8280',
+  serverHostWarranty: 'http://localhost:8180',
+  serverHostSession: 'https://v1kos1k-session-service.herokuapp.com',
+  serverPort: 8480,
+  databaseHost: 'localhost',
+  databasePort: 5432,
+  databaseName: 'storeService',
+  databaseUser: 'docker',
+  databasePassword: 'docker',
+};
