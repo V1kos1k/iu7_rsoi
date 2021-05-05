@@ -1,0 +1,48 @@
+version: "3"
+services:
+  bonus-service:
+    container_name: bonus-service
+    build:
+      context: .
+      dockerfile: ./services/bonusService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8180
+    ports:
+      - "8180:8180"
+
+  airport-service:
+    container_name: airport-service
+    build:
+      context: .
+      dockerfile: ./services/airportService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8280
+    ports:
+      - "8280:8280"
+
+  # order-service:
+  #   container_name: order-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/orderService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8380
+  #   ports:
+  #     - '8380:8380'
+
+  # store-service:
+  #   container_name: store-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/storeService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8480
+  #   ports:
+  #     - '8480:8480'
+
+volumes:
+  db-data:
