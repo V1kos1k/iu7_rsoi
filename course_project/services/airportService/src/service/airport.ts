@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { IAirportInfoResponse } from "../interface/AirportResponse";
 import airportRepository from "../repository/airport";
 
@@ -28,13 +30,14 @@ const getAirport = async (
 };
 
 const addAirport = async (
-  airportUid: string,
   airportName: string,
   airportLocation: string,
   airportAddress: string,
   airportWebadress: string,
   airportInfo: string
 ): Promise<number> => {
+  const airportUid = uuidv4();
+
   return airportRepository
     .addAirport(
       airportUid,

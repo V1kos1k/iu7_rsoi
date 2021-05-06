@@ -68,7 +68,6 @@ const addAirport = async (
   res: Response<IErrorResponse>
 ): Promise<void> => {
   const {
-    airportUid,
     airportName,
     airportLocation,
     airportAddress,
@@ -77,8 +76,6 @@ const addAirport = async (
   } = req.body;
 
   if (
-    !validator.isUUID(airportUid) ||
-    !String(airportUid) ||
     !String(airportName) ||
     !String(airportLocation) ||
     !String(airportAddress) ||
@@ -96,7 +93,6 @@ const addAirport = async (
 
   await airportService
     .addAirport(
-      airportUid,
       airportName,
       airportLocation,
       airportAddress,
