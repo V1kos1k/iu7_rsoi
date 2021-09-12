@@ -69,6 +69,7 @@ const addAirport = async (
 ): Promise<void> => {
   const {
     airportName,
+    airportCode,
     airportLocation,
     airportAddress,
     airportWebadress,
@@ -77,6 +78,7 @@ const addAirport = async (
 
   if (
     !String(airportName) ||
+    !String(airportCode) ||
     !String(airportLocation) ||
     !String(airportAddress) ||
     !String(airportWebadress) ||
@@ -85,7 +87,7 @@ const addAirport = async (
     res.writeHead(400, { "Content-Type": "application/json" }).end(
       JSON.stringify({
         message:
-          "bad request: invalid airportUid or airportName or airportLocation or airportAddress or airportWebadress or airportInfo must be number",
+          "bad request: invalid airportUid or airportName or airportCode or airportLocation or airportAddress or airportWebadress or airportInfo must be number",
       })
     );
     return;
@@ -94,6 +96,7 @@ const addAirport = async (
   await airportService
     .addAirport(
       airportName,
+      airportCode,
       airportLocation,
       airportAddress,
       airportWebadress,

@@ -15,6 +15,7 @@ const getAllAirports = async (): Promise<IAirportInfoResponse[] | number> => {
         return {
           airportUid: item.airport_uid,
           airportName: item.airport_name,
+          airportCode: item.airport_code,
           airportLocation: item.airport_location,
           airportAddress: item.airport_address,
           airportWebadress: item.airport_webadress,
@@ -24,6 +25,7 @@ const getAllAirports = async (): Promise<IAirportInfoResponse[] | number> => {
       return resultArray;
     })
     .catch((err) => {
+      console.log("getAllAirports", err);
       throw err;
     });
 };
@@ -39,6 +41,7 @@ const getAirport = async (
       return {
         airportUid: result.rows[0].airport_uid,
         airportName: result.rows[0].airport_name,
+        airportCode: result.rows[0].airport_code,
         airportLocation: result.rows[0].airport_location,
         airportAddress: result.rows[0].airport_address,
         airportWebadress: result.rows[0].airport_webadress,
@@ -53,6 +56,7 @@ const getAirport = async (
 const addAirport = async (
   airportUid: string,
   airportName: string,
+  airportCode: string,
   airportLocation: string,
   airportAddress: string,
   airportWebadress: string,
@@ -62,12 +66,14 @@ const addAirport = async (
     .query(
       `insert into airport (airport_uid, 
                             airport_name, 
+                            airport_code,
                             airport_location, 
                             airport_address, 
                             airport_webadress, 
                             airport_info) values 
                             ('${airportUid}', 
                             '${airportName}', 
+                            '${airportCode}',
                             '${airportLocation}', 
                             '${airportAddress}', 
                             '${airportWebadress}', 

@@ -7,6 +7,7 @@ export interface IAirportResponseBody {
 export interface IAirportInfoResponse {
   airportUid: string;
   airportName: string;
+  airportCode: string;
   airportLocation: string;
   airportAddress: string;
   airportWebadress: string;
@@ -16,6 +17,7 @@ export interface IAirportInfoResponse {
 export interface IAirportInfoResponseDB {
   airport_uid: string;
   airport_name: string;
+  airport_code: string;
   airport_location: string;
   airport_address: string;
   airport_webadress: string;

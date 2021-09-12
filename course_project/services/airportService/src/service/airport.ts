@@ -31,6 +31,7 @@ const getAirport = async (
 
 const addAirport = async (
   airportName: string,
+  airportCode: string,
   airportLocation: string,
   airportAddress: string,
   airportWebadress: string,
@@ -42,6 +43,7 @@ const addAirport = async (
     .addAirport(
       airportUid,
       airportName,
+      airportCode,
       airportLocation,
       airportAddress,
       airportWebadress,
