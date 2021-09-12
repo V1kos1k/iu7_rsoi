@@ -22,27 +22,16 @@ services:
     ports:
       - "8280:8280"
 
-  # order-service:
-  #   container_name: order-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/orderService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8380
-  #   ports:
-  #     - '8380:8380'
-
-  # store-service:
-  #   container_name: store-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/storeService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8480
-  #   ports:
-  #     - '8480:8480'
+  flight-service:
+    container_name: flight-service
+    build:
+      context: .
+      dockerfile: ./services/flightService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8380
+    ports:
+      - "8380:8380"
 
 volumes:
   db-data:
