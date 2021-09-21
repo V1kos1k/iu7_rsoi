@@ -22,7 +22,7 @@ app.patch("/api/v1/flight/:flightUid", flightController.updateFlight);
 app.delete("/api/v1/flight/:flightUid", flightController.deleteFlight);
 
 app.get("/api/v1/flight", flightController.getAllFlights);
-app.get("/api/v1/flight/:flightUid", flightController.getFlight);
+app.get("/api/v1/flight/:flightUid", flightController.getFlight); // TODO добавить возврат схемы самолета
 
 // места
 app.get("/api/v1/seats/:flightUid", flightController.getSeatsFlight);

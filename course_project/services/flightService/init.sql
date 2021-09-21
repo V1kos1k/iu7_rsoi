@@ -20,6 +20,7 @@ CREATE TABLE flight
     flight_miles                INTEGER      NOT NULL,
     flight_status               VARCHAR(255) NOT NULL,
     flight_free_seats_count     INTEGER,
+    price                       INTEGER      NOT NULL,
     plane_code                  VARCHAR(10) CONSTRAINT fk_flight_plane_code REFERENCES plane (plane_code),
     airline                     VARCHAR(255)
 );

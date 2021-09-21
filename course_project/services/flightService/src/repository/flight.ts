@@ -36,6 +36,7 @@ const getAllFlights = async (): Promise<IFlightInfoResponse[] | number> => {
             flightMiles: Number(item.flight_miles),
             flightStatus: item.flight_status,
             flightFreeSeatsCount: item.flight_free_seats_count,
+            price: item.price,
             planeCode: item.plane_code,
             airline: item.airline,
           };
@@ -70,6 +71,7 @@ const getFlight = async (
         flightMiles: Number(result.rows[0].flight_miles),
         flightStatus: result.rows[0].flight_status,
         flightFreeSeatsCount: result.rows[0].flight_free_seats_count,
+        price: result.rows[0].price,
         planeCode: result.rows[0].plane_code,
         airline: result.rows[0].airline,
       };
@@ -94,6 +96,7 @@ const addFlight = async (props: IFlightAllInfoRequest) => {
                           flight_miles, 
                           flight_status,
                           flight_free_seats_count,
+                          price,
                           plane_code,
                           airline
         ) values (
@@ -106,6 +109,7 @@ const addFlight = async (props: IFlightAllInfoRequest) => {
                           ${props.flightMiles},
                           '${props.flightStatus}',
                           ${props.flightFreeSeatsCount},
+                          ${props.price},
                           '${props.planeCode}',
                           '${props.airline}'
         ) RETURNING flight_uid`

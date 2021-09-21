@@ -82,6 +82,7 @@ const addFlight = async (
     flightTimestamp,
     flightDuration,
     flightMiles,
+    price,
     planeModel,
     airline,
   } = req.body;
@@ -93,13 +94,14 @@ const addFlight = async (
     !String(flightTimestamp) ||
     !String(flightDuration) ||
     !String(flightMiles) ||
+    !Number(price) ||
     !String(planeModel) ||
     !String(airline)
   ) {
     res.writeHead(400, { "Content-Type": "application/json" }).end(
       JSON.stringify({
         message:
-          "bad request: invalid airportDepartureUid or airportArrivalUid or flightTimestamp or flightDuration or flightMiles or planeModel or airline must be number",
+          "bad request: invalid airportDepartureUid or airportArrivalUid or flightTimestamp or flightDuration or flightMiles or price or planeModel or airline must be number",
       })
     );
     return;

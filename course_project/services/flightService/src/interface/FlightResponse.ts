@@ -16,6 +16,7 @@ export interface IFlightInfoResponse {
   flightMiles: number;
   flightStatus: string;
   flightFreeSeatsCount: number;
+  price: number;
   planeCode: string;
   airline: string;
 }
@@ -30,6 +31,7 @@ export interface IFlightAllInfoResponse {
   flightMiles: number;
   flightStatus: string;
   flightFreeSeatsCount: number;
+  price: number;
   planeCode: string;
   airline: string;
 }
@@ -44,6 +46,7 @@ export interface IFlightInfoResponseDB {
   flight_miles: string;
   flight_status: string;
   flight_free_seats_count: number;
+  price: number;
   plane_code: string;
   airline: string;
 }

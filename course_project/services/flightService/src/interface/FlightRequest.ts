@@ -14,6 +14,7 @@ export interface IFlightInfoRequest {
   flightDuration: string;
   flightMiles: number;
   flightStatus: string;
+  price: number;
   planeCode: string;
   airline: string;
 }
@@ -28,6 +29,7 @@ export interface IFlightAllInfoRequest {
   flightMiles: number;
   flightStatus: string;
   flightFreeSeatsCount: number;
+  price: number;
   planeCode: string;
   airline: string;
 }
