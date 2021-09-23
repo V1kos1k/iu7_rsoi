@@ -33,5 +33,16 @@ services:
     ports:
       - "8380:8380"
 
+  ticket-service:
+    container_name: ticket-service
+    build:
+      context: .
+      dockerfile: ./services/ticketService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8480
+    ports:
+      - "8480:8480"
+
 volumes:
   db-data:
