@@ -33,16 +33,54 @@ services:
     ports:
       - "8380:8380"
 
-  ticket-service:
-    container_name: ticket-service
-    build:
-      context: .
-      dockerfile: ./services/ticketService/Dockerfile
-    environment:
-      NODE_ENV: development
-      PORT: 8480
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: "rabbitmq"
     ports:
-      - "8480:8480"
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq_nodejs
+
+  # ticket-service:
+  #   container_name: ticket-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/ticketService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8480
+  #   ports:
+  #     - "8480:8480"
+
+  # session-service:
+  #   container_name: session-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/sessionService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8580
+  #   ports:
+  #     - "8580:8580"
+
+  # statistic-service:
+  #   container_name: statistic-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/statisticService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8680
+  #   ports:
+  #     - "8680:8680"
+
+networks:
+  rabbitmq_nodejs:
+    driver: bridge
 
 volumes:
   db-data:
