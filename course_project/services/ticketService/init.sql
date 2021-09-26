@@ -1,6 +1,6 @@
 CREATE TABLE ticket
 (
-    id                          SERIAL CONSTRAINT flight_pkey PRIMARY KEY,
+    id                          SERIAL CONSTRAINT ticket_pkey PRIMARY KEY,
     ticket_uid                  UUID         NOT NULL CONSTRAINT idx_ticket_uid UNIQUE,
     flight_uid                  UUID         NOT NULL,
     user_uid                    UUID         NOT NULL,

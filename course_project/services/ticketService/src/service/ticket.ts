@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { ITicketInfoResponse } from "../interface/TicketResponse";
 import ticketRepository from "../repository/ticket";
+import { publish } from "../rabbitmq/publisher";
 
 const getAllUserTicket = async (
   userUid: string
@@ -53,6 +54,12 @@ const createTicket = async (
     .createTicket({ ...body, ticketUid })
     .then((result) => {
       if (!result) throw [409, "Действие недоступно пользователю"];
+
+      publish(
+        "",
+        "jobs",
+        new Buffer(JSON.stringify({ result, type: "create" }))
+      );
       return result;
     })
     .catch((err) => {
@@ -68,6 +75,7 @@ const deleteTicket = async (
     .deleteTicket(userUid, ticketUid)
     .then((result) => {
       if (!result) throw [404, "Билет не найден"];
+      // TODO добавить в очередь
       return result;
     })
     .catch((err) => {
