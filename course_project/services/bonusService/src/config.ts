@@ -7,3 +7,13 @@ export const configinfo = {
   databaseUser: "docker",
   databasePassword: "docker",
 };
+
+// export const configinfo = {
+//   serverHostService: "localhost",
+//   serverPort: 8180,
+//   databaseHost: "localhost",
+//   databasePort: 5432,
+//   databaseName: "bonus",
+//   databaseUser: "newuser",
+//   databasePassword: "password",
+// };

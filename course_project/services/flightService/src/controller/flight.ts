@@ -83,9 +83,11 @@ const addFlight = async (
     flightDuration,
     flightMiles,
     price,
-    planeModel,
+    planeCode,
     airline,
   } = req.body;
+
+  console.log("req.body", req.body);
 
   if (
     !String(flightNumber) ||
@@ -95,7 +97,7 @@ const addFlight = async (
     !String(flightDuration) ||
     !String(flightMiles) ||
     !Number(price) ||
-    !String(planeModel) ||
+    !String(planeCode) ||
     !String(airline)
   ) {
     res.writeHead(400, { "Content-Type": "application/json" }).end(
@@ -264,7 +266,7 @@ const addPlane = async (
   await flightService
     .addPlane(req.body)
     .then(() => {
-      res.writeHead(204, { "Content-Type": "application/json" }).end();
+      res.writeHead(201, { "Content-Type": "application/json" }).end();
     })
     .catch((err) => {
       if (err === 404)

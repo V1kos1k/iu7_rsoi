@@ -51,10 +51,10 @@ const createUser = async (props: ISessionRequestBody): Promise<any> => {
       RETURNING user_uid`
     )
     .then((result) => {
-      return result.rows[0];
+      return { userUid: result.rows[0].user_uid };
     })
     .catch((err) => {
-      console.log("createUser err", err);
+      if (err.code === "23505") throw [409, "Логин занят"];
       throw err;
     });
 };

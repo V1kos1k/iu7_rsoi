@@ -139,10 +139,29 @@ const deleteTicket = async (
     });
 };
 
+/**
+ * Удаление всех билетов на рейсе (удаление рейса)
+ */
+const deleteAllTicketFlight = async (flightUid: string): Promise<number> => {
+  return await pool
+    .query(
+      `delete from ticket where flight_uid='${flightUid}' RETURNING flight_uid`
+    )
+    .then((res) => {
+      console.log(res.rowCount);
+      return res.rowCount;
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
 export default {
   getAllTicket,
   getTicket,
   getAllUserTicket,
   createTicket,
   deleteTicket,
+  deleteAllTicketFlight,
 };

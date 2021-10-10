@@ -83,10 +83,23 @@ const deleteTicket = async (
     });
 };
 
+const deleteAllTicketFlight = async (flightUid: string): Promise<number> => {
+  return ticketRepository
+    .deleteAllTicketFlight(flightUid)
+    .then((result) => {
+      if (!result) throw [404, "Билеты не найдены"];
+      return result;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export default {
   getAllUserTicket,
   getTicket,
   getAllTicket,
   createTicket,
   deleteTicket,
+  deleteAllTicketFlight,
 };

@@ -29,6 +29,9 @@ app.delete(
   ticketController.deleteTicket
 );
 
+// удаление всех билетов рейса
+app.delete("/api/v1/ticket/:flightUid", ticketController.deleteAllTicketFlight);
+
 // получение информации о конкретном билете пользователя
 app.get("/api/v1/ticket/user/:userUid/:ticketUid", ticketController.getTicket);
 // получение списка билетов пользователя

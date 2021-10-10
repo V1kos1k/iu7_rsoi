@@ -107,7 +107,7 @@ const addFlight = async (props: IFlightAllInfoRequest) => {
                           '${props.flightTimestamp}',
                           '${props.flightDuration}',
                           ${props.flightMiles},
-                          '${props.flightStatus}',
+                          'Выкл',
                           ${props.flightFreeSeatsCount},
                           ${props.price},
                           '${props.planeCode}',

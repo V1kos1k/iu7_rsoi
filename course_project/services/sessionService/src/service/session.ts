@@ -76,76 +76,48 @@ const verifyToken = async (token: string): Promise<any> => {
       let isActual = verifyDate(payloadObj.exp);
 
       if (isActual) {
-        return payloadObj.uid;
+        return { uid: payloadObj.uid, role: payloadObj.role };
       } else {
         const resT = createToken(payloadObj.uid);
-        return resT;
+        return { uid: resT, role: payloadObj.role };
       }
     }
   );
 };
 
-const getAllUsers = async (token: string): Promise<any> => {
-  return jwt.verify(
-    token,
-    keyPublic,
-    { algorithms: ["RS256"] },
-    (err, payload) => {
-      if (err) throw [401, "Не авторизован"];
-      const payloadObj = Object(payload);
-
-      if (payloadObj.role !== "admin")
-        throw [403, "Действие недоступно пользователю"];
-
-      return sessionRepository
-        .getAllUsers()
-        .then((result) => {
-          if (!result) throw [404, "Пользователи не найдены"];
-          return result;
-        })
-        .catch((err) => {
-          console.log("getAllUsers service err", err);
-          throw err;
-        });
-    }
-  );
+const getAllUsers = async (): Promise<any> => {
+  return sessionRepository
+    .getAllUsers()
+    .then((result) => {
+      if (!result) throw [404, "Пользователи не найдены"];
+      return result;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 const createUser = async (
-  token: string,
   name: string,
   password: string,
   userRole: UserRole
 ): Promise<any> => {
-  return jwt.verify(
-    token,
-    keyPublic,
-    { algorithms: ["RS256"] },
-    (err, payload) => {
-      if (err) throw [401, "Не авторизован"];
-      const payloadObj = Object(payload);
-
-      if (payloadObj.role !== "admin")
-        throw [403, "Действие недоступно пользователю"];
-
-      const userUid = uuidv4();
-      return sessionRepository
-        .createUser({
-          name,
-          userUid,
-          password,
-          userRole,
-        })
-        .then((result) => {
-          if (!result) throw [418, "Я чайник и не знаю что случилось :("];
-          return result;
-        })
-        .catch((err) => {
-          console.log("createUser service err", err);
-          throw err;
-        });
-    }
-  );
+  const userUid = uuidv4();
+  return sessionRepository
+    .createUser({
+      name,
+      userUid,
+      password,
+      userRole,
+    })
+    .then((result) => {
+      if (!result) throw [418, "Я чайник и не знаю что случилось :("];
+      return result;
+    })
+    .catch((err) => {
+      console.log("createUser service err", err);
+      throw err;
+    });
 };
 
 const deleteUser = async (token: string, userUid: string) => {

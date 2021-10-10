@@ -11,16 +11,16 @@ services:
     ports:
       - "8180:8180"
 
-  airport-service:
-    container_name: airport-service
-    build:
-      context: .
-      dockerfile: ./services/airportService/Dockerfile
-    environment:
-      NODE_ENV: development
-      PORT: 8280
-    ports:
-      - "8280:8280"
+  # airport-service:
+  #   container_name: airport-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/airportService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8280
+  #   ports:
+  #     - "8280:8280"
 
   flight-service:
     container_name: flight-service

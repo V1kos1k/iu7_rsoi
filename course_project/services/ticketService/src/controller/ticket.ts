@@ -172,10 +172,43 @@ const deleteTicket = async (
     });
 };
 
+const deleteAllTicketFlight = async (
+  req: Request<any>,
+  res: Response<number | IErrorResponse | ITicketInfoResponse>
+): Promise<void> => {
+  const { flightUid } = req.params;
+
+  if (!validator.isUUID(flightUid)) {
+    res.writeHead(400, { "Content-Type": "application/json" }).end(
+      JSON.stringify({
+        message: "bad request: flightUid must be number",
+      })
+    );
+    return;
+  }
+
+  await ticketService
+    .deleteAllTicketFlight(flightUid)
+    .then(() => {
+      res.writeHead(204, { "Content-Type": "application/json" }).end();
+    })
+    .catch((err) => {
+      if (err[0])
+        res
+          .writeHead(err[0], { "Content-Type": "application/json" })
+          .end(JSON.stringify({ message: err[1] }));
+      else
+        res
+          .writeHead(500, { "Content-Type": "application/json" })
+          .end(JSON.stringify({ message: "internal server error" }));
+    });
+};
+
 export default {
   getTicket,
   getAllUserTicket,
   getAllTicket,
   createTicket,
   deleteTicket,
+  deleteAllTicketFlight,
 };

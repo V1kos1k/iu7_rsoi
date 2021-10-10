@@ -58,6 +58,7 @@ const addFlight = async (props: IFlightInfoRequest) => {
     })
     .then((result: any) => {
       if (!result[0]) throw [409, "Действие недоступно пользователю"];
+      console.log("flightUid", result[0]);
       let values: string[] = [];
       for (let i = 1; i <= result[1].planeRowCount; i++) {
         const valuesRow = result[1].designationSeatsInRow
