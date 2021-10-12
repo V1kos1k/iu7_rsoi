@@ -1,21 +1,21 @@
 FROM ubuntu:latest
 
-RUN apt-get -y update && apt-get install -y tzdata
+# RUN apt-get -y update && apt-get install -y tzdata
 
-ENV TZ=Russia/Moscow
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# ENV TZ=Russia/Moscow
+# RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ENV PGVER 12
-RUN apt-get -y update && apt-get install -y postgresql-$PGVER
+# ENV PGVER 12
+# RUN apt-get -y update && apt-get install -y postgresql-$PGVER
 
-USER postgres
+# USER postgres
 
-RUN /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
-    createdb -O docker gatewayService &&\
-    /etc/init.d/postgresql stop
+# RUN /etc/init.d/postgresql start &&\
+#     psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
+#     createdb -O docker gatewayService &&\
+#     /etc/init.d/postgresql stop
 
-EXPOSE 5432
+# EXPOSE 5432
 
 USER root
 
@@ -32,5 +32,6 @@ RUN npm install
 
 EXPOSE 8780
 
-ENV PGPASSWORD docker
-CMD service postgresql start && psql -h localhost -d gatewayService -U docker -p 5432 -a -q -f /appGateway/init.sql && npm start
+# ENV PGPASSWORD docker
+# CMD service postgresql start && psql -h localhost -d gatewayService -U docker -p 5432 -a -q -f /appGateway/init.sql && npm start
+CMD npm start
