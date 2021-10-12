@@ -5,7 +5,7 @@ import { Flight as FlightCard } from "../../components/Flight";
 import { getFlight, currentFlight, buyTicket } from "../../slices/flight";
 import "./Flight.scss";
 
-const Flight = () => {
+const Flight = (props) => {
   const flight = useSelector(currentFlight);
 
   const dispatch = useDispatch();
@@ -23,8 +23,17 @@ const Flight = () => {
     console.log(seat);
     if (seat.seatStatus === "occupied") return;
 
-    dispatch(buyTicket({ seatNo: seat.seatNo, flightUid: seat.flightUid }));
-    setIsRedirect(true);
+    dispatch(buyTicket({ seatNo: seat.seatNo, flightUid: seat.flightUid }))
+      .unwrap()
+      .then(() => {
+        console.log("(1000)");
+        props.history.push("/profile");
+        // window.location.reload();
+        // setIsRedirect(true);
+      })
+      .catch(() => {
+        console.log("......больно.....");
+      });
   };
 
   const currentUser = useSelector((state) => state.auth.user.user);
