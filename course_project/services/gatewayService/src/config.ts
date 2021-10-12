@@ -10,7 +10,12 @@
 
 export const configinfo = {
   serverHostService: "localhost",
-  serverPort: 8580,
+  databaseHost: "localhost",
+  databasePort: 5432,
+  databaseName: "gatewayService",
+  databaseUser: "docker",
+  databasePassword: "docker",
+  serverPort: 8780,
   serverHostSession: {
     verify: "http://localhost:8580/api/v1/session/verify",
     users: "http://localhost:8580/api/v1/session/users",
