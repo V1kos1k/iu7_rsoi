@@ -2,7 +2,7 @@ import amqp from "amqplib/callback_api";
 import { configinfo } from "../config";
 import { startPublisher } from "./publisher";
 
-const amqpUrl = configinfo.rabbitmq || "amqp://localhost:5673";
+const amqpUrl = configinfo.rabbitmq || "amqp://3.67.182.34:5673";
 let amqpConn: any = null;
 let isConnecting = false;
 

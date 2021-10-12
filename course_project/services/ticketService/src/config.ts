@@ -6,7 +6,7 @@ export const configinfo = {
   databaseName: "ticketService",
   databaseUser: "docker",
   databasePassword: "docker",
-  rabbitmq: "amqp://localhost:5673",
+  rabbitmq: "amqp://3.67.182.34:5673",
 };
 
 // export const configinfo = {
