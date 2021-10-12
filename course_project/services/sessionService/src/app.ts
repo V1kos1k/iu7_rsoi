@@ -5,7 +5,11 @@ import sessionController from "./controller/session";
 
 export const app = express();
 
-app.use(cors());
+const corsOptions = {
+  exposedHeaders: ["Authorization", "role"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (req, res) => {

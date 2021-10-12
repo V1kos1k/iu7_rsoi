@@ -1,0 +1,16 @@
+.card {
+  width: 650px;
+  margin: 40px auto;
+  // border: 3px solid var(--color);
+  border-radius: 5px;
+  padding: 40px 20px;
+  background: var(--color-primary);
+  justify-content: space-evenly;
+  .departure {
+    font-weight: 500;
+  }
+  &__link {
+    text-decoration: none;
+    color: var(--color);
+  }
+}

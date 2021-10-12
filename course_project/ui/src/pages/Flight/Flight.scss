@@ -1,0 +1,43 @@
+.flight {
+  flex: 1;
+  background: var(--color-secondary);
+
+  .card-link {
+    cursor: auto;
+  }
+
+  .additional-info {
+    width: 650px;
+    padding-top: 40px;
+    margin: 0 auto;
+    // border: 3px solid var(--color);
+    border-radius: 5px;
+    padding: 40px 20px;
+    background: var(--color-primary);
+    justify-content: space-evenly;
+    &__link {
+      text-decoration: none;
+      color: var(--color);
+    }
+  }
+  .seats-card__grid {
+    display: grid;
+    grid-template-columns: 132px 132px 132px 132px 83px;
+    grid-template-rows: auto;
+    row-gap: 15px;
+    justify-content: center;
+    margin: 20px;
+  }
+  .seats-card {
+    width: fit-content;
+    border: 2px solid var(--color);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .free {
+    background: #c3f0ca;
+  }
+  .occupied {
+    background: #ffc6c7;
+  }
+}

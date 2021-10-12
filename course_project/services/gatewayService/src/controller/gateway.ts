@@ -117,6 +117,35 @@ const createUser = async (
       });
 };
 
+const getAirports = async (
+  req: Request<any>,
+  res: Response<any>
+): Promise<void> => {
+  const userUid = String(req.headers["UID"]);
+  const userRole = String(req.headers["role"]);
+
+  if (userUid !== "undefined")
+    await gatewayService
+      .getAirports()
+      .then((result) => {
+        res
+          .writeHead(200, {
+            "Content-Type": "application/json",
+          })
+          .end(JSON.stringify(result));
+      })
+      .catch((err) => {
+        if (err[0])
+          res
+            .writeHead(err[0], { "Content-Type": "application/json" })
+            .end(JSON.stringify({ message: err[1] }));
+        else
+          res
+            .writeHead(500, { "Content-Type": "application/json" })
+            .end(JSON.stringify({ message: "internal server error" }));
+      });
+};
+
 const getAllPlanes = async (
   req: Request<any>,
   res: Response<any>
@@ -124,14 +153,7 @@ const getAllPlanes = async (
   const userUid = String(req.headers["UID"]);
   const userRole = String(req.headers["role"]);
 
-  if (userUid !== "undefined" && userRole !== "admin") {
-    res.writeHead(403, { "Content-Type": "application/json" }).end(
-      JSON.stringify({
-        message: "Нет права доступа",
-      })
-    );
-    return;
-  } else if (userUid !== "undefined")
+  if (userUid !== "undefined")
     await gatewayService
       .getAllPlanes()
       .then((result) => {
@@ -690,4 +712,5 @@ export default {
   getTicket,
   getUserTickets,
   getStatistics,
+  getAirports,
 };

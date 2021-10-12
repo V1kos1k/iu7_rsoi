@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
-import storeController from './controller/store';
+import storeController from "./controller/store";
 
-import { tokenMiddleware } from './middleware/tokenMiddleware';
+import { tokenMiddleware } from "./middleware/tokenMiddleware";
 
 export const app = express();
 
@@ -12,18 +12,18 @@ app.use(express.json());
 
 app.use(tokenMiddleware);
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'sleep' });
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "sleep" });
 });
 
-app.get('/api/v1/store/:userUid/orders', storeController.getUserOrders);
-app.get('/api/v1/store/:userUid/:orderUid', storeController.getUserOrder);
-app.post('/api/v1/store/:userUid/purchase', storeController.makePurchase);
+app.get("/api/v1/store/:userUid/orders", storeController.getUserOrders);
+app.get("/api/v1/store/:userUid/:orderUid", storeController.getUserOrder);
+app.post("/api/v1/store/:userUid/purchase", storeController.makePurchase);
 app.post(
-  '/api/v1/store/:userUid/:orderUid/warranty',
+  "/api/v1/store/:userUid/:orderUid/warranty",
   storeController.warrantyRequest
 );
 app.delete(
-  '/api/v1/store/:userUid/:orderUid/refund',
+  "/api/v1/store/:userUid/:orderUid/refund",
   storeController.refundOrder
 );

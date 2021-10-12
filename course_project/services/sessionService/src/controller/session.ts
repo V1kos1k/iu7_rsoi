@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { ISessionRequest } from "../interface/SessionRequest";
 
 import sessionService from "../service/session";
@@ -27,7 +27,8 @@ const getUserToken = async (
       res
         .writeHead(200, {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${result}`,
+          Authorization: `Bearer ${result.token}`,
+          role: result.role,
         })
         .end();
     })

@@ -53,6 +53,18 @@ const createUser = async (body: any): Promise<any> => {
   else throw [422, "Ошибка другого сервиса"];
 };
 
+const getAirports = async (): Promise<any> => {
+  const response = await fetch(configinfo.serverHostAirport.airport, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status === 200) return await response.json();
+  else if (response.status == 404) throw [404, "Аэропорты не найдены"];
+  else throw [422, "Ошибка другого сервиса"];
+};
+
 const getAllPlanes = async (): Promise<any> => {
   const response = await fetch(configinfo.serverHostFlight.planes, {
     method: "GET",
@@ -80,14 +92,15 @@ const createPlane = async (body: any): Promise<any> => {
 };
 
 const getAllFlights = async (): Promise<any> => {
-  const response = await fetch(configinfo.serverHostFlight.flight, {
+  let response: any = await fetch(configinfo.serverHostFlight.flight, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
-  if (response.status === 200) return await response.json();
-  else if (response.status == 404) throw [404, "Рейсы не найдены"];
+  if (response.status === 200) {
+    return processArrayAirportsFlights(await response.json());
+  } else if (response.status == 404) throw [404, "Рейсы не найдены"];
   else throw [422, "Ошибка другого сервиса"];
 };
 
@@ -102,7 +115,7 @@ const getFlight = async (flightUid: string): Promise<any> => {
     }
   );
   if (responseFlight.status === 200) {
-    const data = await responseFlight.json();
+    const responseData = await responseFlight.json();
 
     const responseSeats = await fetch(
       `${configinfo.serverHostFlight.seats}/${flightUid}`,
@@ -114,10 +127,34 @@ const getFlight = async (flightUid: string): Promise<any> => {
       }
     );
 
+    const responseAitportDeparture = await fetch(
+      `${configinfo.serverHostAirport.airport}/${responseData.airportDepartureUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseAitportArrival = await fetch(
+      `${configinfo.serverHostAirport.airport}/${responseData.airportArrivalUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseAitportDepartureData = await responseAitportDeparture.json();
+    const responseAitportArrivalData = await responseAitportArrival.json();
+
+    responseData.aitportDepartureData = responseAitportDepartureData;
+    responseData.aitportArrivalData = responseAitportArrivalData;
+
     if (responseSeats.status === 200)
-      return { flight: data, seats: await responseSeats.json() };
+      return { flight: responseData, seats: await responseSeats.json() };
     else if (responseSeats.status === 404)
-      return { flight: data, seats: [404, "Места не найдены"] };
+      return { flight: responseData, seats: [404, "Места не найдены"] };
   } else if (responseFlight.status == 404) throw [404, "Рейсы не найдены"];
   else throw [422, "Ошибка другого сервиса"];
 };
@@ -454,6 +491,40 @@ async function processArray(arr: any) {
   }
 }
 
+async function processArrayAirportsFlights(arr: any) {
+  let result: any = { flight: [] };
+
+  for (let i = 0; i < arr.length; i++) {
+    const responseAitportDeparture = await fetch(
+      `${configinfo.serverHostAirport.airport}/${arr[i].airportDepartureUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseAitportArrival = await fetch(
+      `${configinfo.serverHostAirport.airport}/${arr[i].airportArrivalUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseAitportDepartureData = await responseAitportDeparture.json();
+    const responseAitportArrivalData = await responseAitportArrival.json();
+    result.flight.push({
+      ...arr[i],
+      aitportDepartureData: responseAitportDepartureData,
+      aitportArrivalData: responseAitportArrivalData,
+    });
+
+    if (i === arr.length - 1) return result;
+  }
+}
+
 const getStatistics = async (): Promise<any> => {
   const responseNumberOfTicketsPurchased = await fetch(
     configinfo.serverHostStatistics.numberOfTicketsPurchased,
@@ -507,4 +578,5 @@ export default {
   getTicket,
   getUserTickets,
   getStatistics,
+  getAirports,
 };

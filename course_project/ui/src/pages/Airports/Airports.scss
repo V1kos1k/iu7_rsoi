@@ -1,0 +1,31 @@
+.airports {
+  .card {
+    width: 750px;
+    margin: 40px auto;
+    // border: 3px solid var(--color);
+    border-radius: 5px;
+    padding: 40px 20px;
+    background: var(--color-secondary);
+    justify-content: space-evenly;
+    .departure {
+      font-weight: 500;
+    }
+
+    &__link {
+      text-decoration: none;
+      color: var(--color);
+    }
+
+    button {
+      background: var(--color-third);
+      color: var(--color);
+      width: 100%;
+      height: 2rem;
+      font-size: 16px;
+      font-weight: 600;
+      border: 3px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}

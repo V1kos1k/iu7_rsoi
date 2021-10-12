@@ -38,7 +38,8 @@ const getUserToken = async (login: string, password: string): Promise<any> => {
     .getUserByLoginAndPassword(login, password)
     .then((result) => {
       let token = createToken(result);
-      return token;
+
+      return { token, role: result.userRole };
     })
     .catch((err) => {
       console.log("getUserToken", err);

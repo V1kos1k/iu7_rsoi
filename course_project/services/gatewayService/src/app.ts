@@ -6,7 +6,11 @@ import { tokenMiddleware } from "./middleware/tokenMiddleware";
 
 export const app = express();
 
-app.use(cors());
+const corsOptions = {
+  exposedHeaders: "Authorization",
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(tokenMiddleware);
@@ -54,5 +58,8 @@ app.get("/api/v1/gateway/ticket/:ticketUid", gatewayController.getTicket);
 app.get("/api/v1/gateway/ticket", gatewayController.getUserTickets);
 // получение информации о пользователе (просмотр баланса бонусов пользователя)
 app.get("/api/v1/gateway/users/user", gatewayController.getUser);
-// TODO просмотр статистики (админ) тут можен быть 2 запроса на каждую статистику
+// просмотр статистики (админ) тут можен быть 2 запроса на каждую статистику
 app.get("/api/v1/gateway/statistics", gatewayController.getStatistics);
+
+// получение списка аэропортов
+app.get("/api/v1/gateway/airport", gatewayController.getAirports);
