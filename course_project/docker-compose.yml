@@ -11,16 +11,16 @@ services:
     ports:
       - "8180:8180"
 
-  # airport-service:
-  #   container_name: airport-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/airportService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8280
-  #   ports:
-  #     - "8280:8280"
+  airport-service:
+    container_name: airport-service
+    build:
+      context: .
+      dockerfile: ./services/airportService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8280
+    ports:
+      - "8280:8280"
 
   flight-service:
     container_name: flight-service
@@ -45,38 +45,49 @@ services:
     networks:
       - rabbitmq_nodejs
 
-  # ticket-service:
-  #   container_name: ticket-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/ticketService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8480
-  #   ports:
-  #     - "8480:8480"
+  ticket-service:
+    container_name: ticket-service
+    build:
+      context: .
+      dockerfile: ./services/ticketService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8480
+    ports:
+      - "8480:8480"
 
-  # session-service:
-  #   container_name: session-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/sessionService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8580
-  #   ports:
-  #     - "8580:8580"
+  session-service:
+    container_name: session-service
+    build:
+      context: .
+      dockerfile: ./services/sessionService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8580
+    ports:
+      - "8580:8580"
 
-  # statistic-service:
-  #   container_name: statistic-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/statisticService/Dockerfile
-  #   environment:
-  #     NODE_ENV: development
-  #     PORT: 8680
-  #   ports:
-  #     - "8680:8680"
+  statistic-service:
+    container_name: statistic-service
+    build:
+      context: .
+      dockerfile: ./services/statisticService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8680
+    ports:
+      - "8680:8680"
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: .
+      dockerfile: ./services/gatewayService/Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 8780
+    ports:
+      - "8780:8780"
 
 networks:
   rabbitmq_nodejs:
