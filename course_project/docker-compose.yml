@@ -78,16 +78,16 @@ services:
     ports:
       - "8680:8680"
 
-  gateway-service:
-    container_name: gateway-service
-    build:
-      context: .
-      dockerfile: ./services/gatewayService/Dockerfile
-    environment:
-      NODE_ENV: development
-      PORT: 8780
-    ports:
-      - "8780:8780"
+  # gateway-service:
+  #   container_name: gateway-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./services/gatewayService/Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 8780
+  #   ports:
+  #     - "8780:8780"
 
 networks:
   rabbitmq_nodejs:
