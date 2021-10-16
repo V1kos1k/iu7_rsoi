@@ -15,6 +15,8 @@ const messageSlice = createSlice({
   },
 });
 
+export const messageInfo = (state) => state.message.message;
+
 const { reducer, actions } = messageSlice;
 
 export const { setMessage, clearMessage } = actions;

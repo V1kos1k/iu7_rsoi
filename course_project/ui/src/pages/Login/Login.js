@@ -4,15 +4,16 @@ import { Redirect } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { login } from "../../slices/auth";
+import { Message } from "../../components/Message";
+import { login, isUseLoggedIn } from "../../slices/auth";
 import { clearMessage } from "../../slices/message";
 import "./Login.scss";
 
 const Login = (props) => {
   const [loading, setLoading] = useState(false);
 
-  const { isLoggedIn } = useSelector((state) => state.auth.user);
-  const { message } = useSelector((state) => state.message);
+  const isLoggedIn = useSelector(isUseLoggedIn);
+  // const { message } = useSelector((state) => state.message);
 
   const dispatch = useDispatch();
 
@@ -35,11 +36,14 @@ const Login = (props) => {
     setLoading(true);
 
     dispatch(login({ username, password }))
-      .unwrap()
-      .then(() => {
-        console.log("(1)");
-        props.history.push("/profile");
-        window.location.reload();
+      .then((res) => {
+        console.log("(1)", res.error);
+        if (!res.error) {
+          props.history.push("/profile");
+          window.location.reload();
+        } else {
+          setLoading(false);
+        }
       })
       .catch(() => {
         setLoading(false);
@@ -101,8 +105,9 @@ const Login = (props) => {
           </Form>
         </Formik>
       </div>
+      <Message />
 
-      {message && (
+      {/* {message && (
         <div className="message">
           <div
             className="alert alert-dangeralert alert-danger alert-danger"
@@ -111,7 +116,7 @@ const Login = (props) => {
             {message}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

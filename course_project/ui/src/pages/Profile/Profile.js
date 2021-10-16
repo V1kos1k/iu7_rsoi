@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { userInfo } from "../../slices/auth";
 import {
   getAllTickets,
   allTickets,
@@ -11,7 +12,7 @@ import {
 import "./Profile.scss";
 
 const Profile = () => {
-  const currentUser = useSelector((state) => state.auth.user.user);
+  const currentUser = useSelector(userInfo);
   const tickets = useSelector(allTickets);
   const miles = useSelector(getUserMiles);
 

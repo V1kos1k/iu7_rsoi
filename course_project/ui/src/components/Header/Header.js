@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../slices/auth";
+import { logout, userInfo } from "../../slices/auth";
 import EventBus from "../../common/EventBus";
 import { Link } from "react-router-dom";
 import "./Header.scss";
 
 const Header = (props) => {
-  const currentUser = useSelector((state) => state.auth.user.user);
+  const currentUser = useSelector(userInfo);
   const dispatch = useDispatch();
 
   const logOut = useCallback(() => {

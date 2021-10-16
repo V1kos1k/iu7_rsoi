@@ -2,224 +2,280 @@ import fetch from "node-fetch";
 import { configinfo } from "../config";
 
 const getUsers = async (): Promise<any> => {
-  const response = await fetch(configinfo.serverHostSession.users, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const response = await fetch(configinfo.serverHostSession.users, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (response.status !== 200) throw [422, "Ошибка другого сервиса"];
-  return await response.json();
+    if (response.status !== 200) throw [422, "Ошибка другого сервиса"];
+    return await response.json();
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 const getUser = async (userUid: string): Promise<any> => {
-  const response = await fetch(
-    `${configinfo.serverHostBonus.bonus}/${userUid}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const response = await fetch(
+      `${configinfo.serverHostBonus.bonus}/${userUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (response.status === 200) return await response.json();
-  else if (response.status === 404) throw [404, "Пользователь не найден"];
-  else throw [422, "Ошибка другого сервиса"];
+    if (response.status === 200) return await response.json();
+    else if (response.status === 404) throw [404, "Пользователь не найден"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 const createUser = async (body: any): Promise<any> => {
-  const response = await fetch(configinfo.serverHostSession.create, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (response.status === 201) {
-    const responseSession = await response.json();
-    await fetch(
-      `${configinfo.serverHostBonus.bonus}/${responseSession.userUid}/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return "ok";
-  } else if (response.status === 409) throw [409, "Логин занят"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const getAirports = async (): Promise<any> => {
-  const response = await fetch(configinfo.serverHostAirport.airport, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.status === 200) return await response.json();
-  else if (response.status == 404) throw [404, "Аэропорты не найдены"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const getAllPlanes = async (): Promise<any> => {
-  const response = await fetch(configinfo.serverHostFlight.planes, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.status === 200) return await response.json();
-  else if (response.status == 404) throw [404, "Самолеты не найдены"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const createPlane = async (body: any): Promise<any> => {
-  const response = await fetch(configinfo.serverHostFlight.addPlane, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  console.log(response);
-  if (response.status === 201) return "ok";
-  else if (response.status === 409) throw [409, "Код самолета занят"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const getAllFlights = async (): Promise<any> => {
-  let response: any = await fetch(configinfo.serverHostFlight.flight, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.status === 200) {
-    return processArrayAirportsFlights(await response.json());
-  } else if (response.status == 404) throw [404, "Рейсы не найдены"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const getFlight = async (flightUid: string): Promise<any> => {
-  const responseFlight = await fetch(
-    `${configinfo.serverHostFlight.flight}/${flightUid}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if (responseFlight.status === 200) {
-    const responseData = await responseFlight.json();
-
-    const responseSeats = await fetch(
-      `${configinfo.serverHostFlight.seats}/${flightUid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const responseAitportDeparture = await fetch(
-      `${configinfo.serverHostAirport.airport}/${responseData.airportDepartureUid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const responseAitportArrival = await fetch(
-      `${configinfo.serverHostAirport.airport}/${responseData.airportArrivalUid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const responseAitportDepartureData = await responseAitportDeparture.json();
-    const responseAitportArrivalData = await responseAitportArrival.json();
-
-    responseData.aitportDepartureData = responseAitportDepartureData;
-    responseData.aitportArrivalData = responseAitportArrivalData;
-
-    if (responseSeats.status === 200)
-      return { flight: responseData, seats: await responseSeats.json() };
-    else if (responseSeats.status === 404)
-      return { flight: responseData, seats: [404, "Места не найдены"] };
-  } else if (responseFlight.status == 404) throw [404, "Рейсы не найдены"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const addFlight = async (body: any): Promise<any> => {
-  const response = await fetch(configinfo.serverHostFlight.flight, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (response.status === 201) return "ok";
-  else if (response.status === 404) return [404, "Самолет не найден"];
-  else throw [422, "Ошибка другого сервиса"];
-};
-
-const updateFlight = async (flightUid: string, body: any): Promise<any> => {
-  const response = await fetch(
-    `${configinfo.serverHostFlight.flight}/${flightUid}`,
-    {
-      method: "PATCH",
+  try {
+    const response = await fetch(configinfo.serverHostSession.create, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    }
-  );
-  if (response.status === 204) return "ok";
-  else if (response.status === 409) throw [409, "Код самолета занят"];
-  else throw [422, "Ошибка другого сервиса"];
+    });
+    if (response.status === 201) {
+      const responseSession = await response.json();
+      await fetch(
+        `${configinfo.serverHostBonus.bonus}/${responseSession.userUid}/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return "ok";
+    } else if (response.status === 409) throw [409, "Логин занят"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const getAirports = async (): Promise<any> => {
+  try {
+    const response = await fetch(configinfo.serverHostAirport.airport, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.status === 200) return await response.json();
+    else if (response.status == 404) throw [404, "Аэропорты не найдены"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const getAllPlanes = async (): Promise<any> => {
+  try {
+    const response = await fetch(configinfo.serverHostFlight.planes, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.status === 200) return await response.json();
+    else if (response.status == 404) throw [404, "Самолеты не найдены"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const createPlane = async (body: any): Promise<any> => {
+  try {
+    const response = await fetch(configinfo.serverHostFlight.addPlane, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    console.log(response);
+    if (response.status === 201) return "ok";
+    else if (response.status === 409) throw [409, "Код самолета занят"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const getAllFlights = async (): Promise<any> => {
+  try {
+    let response: any = await fetch(configinfo.serverHostFlight.flight, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.status === 200) {
+      return processArrayAirportsFlights(await response.json());
+    } else if (response.status == 404) throw [404, "Рейсы не найдены"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const getFlight = async (flightUid: string): Promise<any> => {
+  try {
+    const responseFlight = await fetch(
+      `${configinfo.serverHostFlight.flight}/${flightUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (responseFlight.status === 200) {
+      const responseData = await responseFlight.json();
+
+      const responseSeats = await fetch(
+        `${configinfo.serverHostFlight.seats}/${flightUid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const responseAitportDeparture = await fetch(
+        `${configinfo.serverHostAirport.airport}/${responseData.airportDepartureUid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const responseAitportArrival = await fetch(
+        `${configinfo.serverHostAirport.airport}/${responseData.airportArrivalUid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const responseAitportDepartureData =
+        await responseAitportDeparture.json();
+      const responseAitportArrivalData = await responseAitportArrival.json();
+
+      responseData.aitportDepartureData = responseAitportDepartureData;
+      responseData.aitportArrivalData = responseAitportArrivalData;
+
+      if (responseSeats.status === 200)
+        return { flight: responseData, seats: await responseSeats.json() };
+      else if (responseSeats.status === 404)
+        return { flight: responseData, seats: [404, "Места не найдены"] };
+    } else if (responseFlight.status == 404) throw [404, "Рейсы не найдены"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const addFlight = async (body: any): Promise<any> => {
+  try {
+    const response = await fetch(configinfo.serverHostFlight.flight, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (response.status === 201) return "ok";
+    else if (response.status === 404) return [404, "Самолет не найден"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
+};
+
+const updateFlight = async (flightUid: string, body: any): Promise<any> => {
+  try {
+    const response = await fetch(
+      `${configinfo.serverHostFlight.flight}/${flightUid}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    if (response.status === 204) return "ok";
+    else if (response.status === 409) throw [409, "Код самолета занят"];
+    else throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 const deleteFlight = async (flightUid: string): Promise<any> => {
-  let response: any = { flight: [], ticket: [] };
+  try {
+    let response: any = { flight: [], ticket: [] };
 
-  const responseFlight = await fetch(
-    `${configinfo.serverHostFlight.flight}/${flightUid}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if (responseFlight.status === 204) response.flight = [204, "ok"];
-  else if (responseFlight.status === 404)
-    response.flight = [404, "Рейс не найден"];
-  else response.flight = [422, "Ошибка другого сервиса"];
+    const responseFlight = await fetch(
+      `${configinfo.serverHostFlight.flight}/${flightUid}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (responseFlight.status === 204) response.flight = [204, "ok"];
+    else if (responseFlight.status === 404)
+      response.flight = [404, "Рейс не найден"];
+    else response.flight = [422, "Ошибка другого сервиса"];
 
-  const responseTicket = await fetch(
-    `${configinfo.serverHostTicket.ticket}/${flightUid}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if (responseTicket.status === 204) response.ticket = [204, "ok"];
-  else if (responseTicket.status === 404)
-    response.ticket = [404, "Рейс не найден"];
-  else response.ticket = [422, "Ошибка другого сервиса"];
+    const responseTicket = await fetch(
+      `${configinfo.serverHostTicket.ticket}/${flightUid}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (responseTicket.status === 204) response.ticket = [204, "ok"];
+    else if (responseTicket.status === 404)
+      response.ticket = [404, "Рейс не найден"];
+    else response.ticket = [422, "Ошибка другого сервиса"];
 
-  return response;
+    return response;
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 const buyTicket = async (
@@ -301,44 +357,49 @@ const deleteTicket = async (
   ticketUid: string,
   seatNo: string
 ): Promise<any> => {
-  let response: any = { flight: [], ticket: [] };
-  const responseFlight = await fetch(
-    `${configinfo.serverHostFlight.seats}/${flightUid}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ seatNo, seatStatus: "free" }),
+  try {
+    let response: any = { flight: [], ticket: [] };
+    const responseFlight = await fetch(
+      `${configinfo.serverHostFlight.seats}/${flightUid}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ seatNo, seatStatus: "free" }),
+      }
+    );
+    if (responseFlight.status === 200)
+      response.flight = [200, await responseFlight.json()];
+    else if (responseFlight.status === 404)
+      response.flight = [404, await responseFlight.json()];
+    else if (responseFlight.status === 409) {
+      response.flight = [409, await responseFlight.json()];
+      return response;
+    } else {
+      response.flight = [422, "Ошибка другого сервиса"];
+      return response;
     }
-  );
-  if (responseFlight.status === 200)
-    response.flight = [200, await responseFlight.json()];
-  else if (responseFlight.status === 404)
-    response.flight = [404, await responseFlight.json()];
-  else if (responseFlight.status === 409) {
-    response.flight = [409, await responseFlight.json()];
+
+    const responseTicket = await fetch(
+      `${configinfo.serverHostTicket.userTiket}/${userUid}/${ticketUid}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (responseTicket.status === 204) response.ticket = [204, "ok"];
+    else if (responseTicket.status === 404)
+      response.ticket = [404, await responseTicket.json()];
+    else response.ticket = [422, "Ошибка другого сервиса"];
+
     return response;
-  } else {
-    response.flight = [422, "Ошибка другого сервиса"];
-    return response;
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
   }
-
-  const responseTicket = await fetch(
-    `${configinfo.serverHostTicket.userTiket}/${userUid}/${ticketUid}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if (responseTicket.status === 204) response.ticket = [204, "ok"];
-  else if (responseTicket.status === 404)
-    response.ticket = [404, await responseTicket.json()];
-  else response.ticket = [422, "Ошибка другого сервиса"];
-
-  return response;
 };
 
 const getTicket = async (userUid: string, ticketUid: string): Promise<any> => {
@@ -386,7 +447,8 @@ const getTicket = async (userUid: string, ticketUid: string): Promise<any> => {
           },
         }
       );
-      const responseAitportDepartureData = await responseAitportDeparture.json();
+      const responseAitportDepartureData =
+        await responseAitportDeparture.json();
       const responseAitportArrivalData = await responseAitportArrival.json();
 
       response.flight = [
@@ -409,24 +471,30 @@ const getTicket = async (userUid: string, ticketUid: string): Promise<any> => {
 };
 
 const getUserTickets = async (userUid: string): Promise<any> => {
-  let response: any = { ticket: [] };
+  try {
+    let response: any = { ticket: [] };
 
-  const responseTicket = await fetch(
-    `${configinfo.serverHostTicket.userTiket}/${userUid}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const ticketData = await responseTicket.json();
-  if (responseTicket.status === 200) {
-    response = await processArray(ticketData);
-  } else if (responseTicket.status === 404) response.ticket = [404, ticketData];
-  else response.ticket = [422, "Ошибка другого сервиса"];
+    const responseTicket = await fetch(
+      `${configinfo.serverHostTicket.userTiket}/${userUid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const ticketData = await responseTicket.json();
+    if (responseTicket.status === 200) {
+      response = await processArray(ticketData);
+    } else if (responseTicket.status === 404)
+      response.ticket = [404, ticketData];
+    else response.ticket = [422, "Ошибка другого сервиса"];
 
-  return response;
+    return response;
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 async function processArray(arr: any) {
@@ -463,7 +531,8 @@ async function processArray(arr: any) {
           },
         }
       );
-      const responseAitportDepartureData = await responseAitportDeparture.json();
+      const responseAitportDepartureData =
+        await responseAitportDeparture.json();
       const responseAitportArrivalData = await responseAitportArrival.json();
       result.ticket.push({
         ...arr[i],
@@ -526,40 +595,48 @@ async function processArrayAirportsFlights(arr: any) {
 }
 
 const getStatistics = async (): Promise<any> => {
-  const responseNumberOfTicketsPurchased = await fetch(
-    configinfo.serverHostStatistics.numberOfTicketsPurchased,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const responseNumberOfTicketsPurchasedForTheFlight = await fetch(
-    configinfo.serverHostStatistics.numberOfTicketsPurchasedForTheFlight,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const responseNumberOfTicketsPurchased = await fetch(
+      configinfo.serverHostStatistics.numberOfTicketsPurchased,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(responseNumberOfTicketsPurchased);
+    const responseNumberOfTicketsPurchasedForTheFlight = await fetch(
+      configinfo.serverHostStatistics.numberOfTicketsPurchasedForTheFlight,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (
-    responseNumberOfTicketsPurchased.status !== 500 ||
-    responseNumberOfTicketsPurchasedForTheFlight.status !== 500
-  ) {
-    return {
-      responseNumberOfTicketsPurchased: [
-        responseNumberOfTicketsPurchased.status,
-        await responseNumberOfTicketsPurchased.json(),
-      ],
-      responseNumberOfTicketsPurchasedForTheFlight: [
-        responseNumberOfTicketsPurchasedForTheFlight.status,
-        await responseNumberOfTicketsPurchasedForTheFlight.json(),
-      ],
-    };
-  } else throw [422, "Ошибка другого сервиса"];
+    if (
+      responseNumberOfTicketsPurchased.status !== 500 ||
+      responseNumberOfTicketsPurchasedForTheFlight.status !== 500
+    ) {
+      return {
+        responseNumberOfTicketsPurchased: [
+          responseNumberOfTicketsPurchased.status,
+          await responseNumberOfTicketsPurchased.json(),
+        ],
+        responseNumberOfTicketsPurchasedForTheFlight: [
+          responseNumberOfTicketsPurchasedForTheFlight.status,
+          await responseNumberOfTicketsPurchasedForTheFlight.json(),
+        ],
+      };
+    }
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  } catch {
+    console.log("(2)?????");
+    throw [422, "Ошибка другого сервиса"];
+  }
 };
 
 export default {

@@ -108,6 +108,8 @@ const authSlice = createSlice({
   },
 });
 
+export const isUseLoggedIn = (state) => state.auth?.user?.isLoggedIn;
+export const userInfo = (state) => state.auth?.user?.user;
 export const userRole = (state) => state.auth?.user?.role;
 export const allUsers = (state) => state.auth.users;
 
